@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Board } from "../models/Board";
 import CellComponent from "./CellComponent";
 import { Cell } from "../models/Cell";
@@ -12,9 +12,33 @@ const BoardComponent: React.FC<BoardComponentProps> = ({ board, setBoard }) => {
     const [ selectedCell, setSelectedCell ] = useState<Cell | null>(null);
     
     const onClick = (cell: Cell) => {
-        if ( cell.figure ) {
+        if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
+            selectedCell.moveFigure(cell);
+            setSelectedCell(null);
+        } else {
             setSelectedCell(cell)
         }
+    };
+    
+    // на каждое изменение выбранной ячейки перерисовываем доску
+    useEffect(() => {
+        highlightCells();
+    }, [selectedCell]);
+    
+    /**
+     * На какие ячейки может перемещаться фигура
+     */
+    const highlightCells = () => {
+        board.highlightCells(selectedCell);
+        updateBoard();
+    };
+    
+    /**
+     * Перерисовка доски в соответствии с новыми данными
+     */
+    const updateBoard = () => {
+        const newBoard = board.getCopyBoard();
+        setBoard(newBoard)
     };
     
     return (

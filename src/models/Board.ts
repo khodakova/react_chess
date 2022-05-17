@@ -30,6 +30,31 @@ export class Board {
         }
     }
     
+    /**
+     * подсчет того, на какие ячейки может перемещаться объект
+     * @param selectedCell
+     */
+    public highlightCells(selectedCell: Cell | null) {
+        for (let i = 0; i < this.cells.length; i++) {
+            const row = this.cells[i];
+            
+            for (let j = 0; j < row.length; j++ ) {
+                const target = row[j];
+                // определяем, может ли походить фигура на ячейку
+                target.available = !!selectedCell?.figure?.canMove(target)
+            }
+        }
+    }
+    
+    /**
+     * для перерисовки доски
+     */
+    public getCopyBoard(): Board {
+        const newBoard = new Board();
+        newBoard.cells = this.cells;
+        return newBoard;
+    }
+    
     public getCell(x: number, y: number) {
         return this.cells[y][x]
     }

@@ -11,4 +11,14 @@ export class Bishop extends Figure {
         this.logo = color === Colors.WHITE ? whiteLogo : blackLogo;
         this.name = FigureNames.BISHOP;
     }
+    
+    // слон может двигаться только по диагонали
+    canMove(target: Cell): boolean {
+        if ( !super.canMove(target) ) {
+            return false;
+        }
+        if (this.cell.isEmptyDiagonal(target))
+            return true;
+        return true;
+    }
 }

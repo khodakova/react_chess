@@ -32,6 +32,14 @@ export class Figure {
      * @param target
      */
     canMove(target: Cell): boolean {
+        // мы не можем жрать своих товарищей
+        if (target.figure?.color === this.color) {
+            return false
+        }
+        // мы не можем жрать владыку
+        if (target.figure?.name === FigureNames.KING) {
+            return false
+        }
         return true;
     }
     
