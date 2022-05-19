@@ -15,6 +15,19 @@ export class King extends Figure {
         if ( !super.canMove(target) ) {
             return false;
         }
-        return true;
+        
+        // смещения
+        const dx = Math.abs(this.cell.x - target.x);
+        const dy = Math.abs(this.cell.y - target.y);
+        
+        // король может двигаться в любую сторону, но только на одну клетку
+        if (this.cell.isEmptyVertical(target) && dy === 1)
+            return true;
+        if (this.cell.isEmptyHorizontal(target) && dx === 1)
+            return true;
+        if (this.cell.isEmptyDiagonal(target) && dx === 1)
+            return true;
+        
+        return false;
     }
 }

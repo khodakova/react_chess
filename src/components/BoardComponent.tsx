@@ -2,28 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { Board } from "../models/Board";
 import CellComponent from "./CellComponent";
 import { Cell } from "../models/Cell";
+import { Player } from "../models/Player";
 
 interface BoardComponentProps {
     board: Board;
     setBoard: (board: Board) => void;
+    currentPlayer: Player | null;
+    swapPlayer: () => void
 }
 
-const BoardComponent: React.FC<BoardComponentProps> = ({ board, setBoard }) => {
+const BoardComponent: React.FC<BoardComponentProps> = ({ board, setBoard, currentPlayer, swapPlayer }) => {
     const [ selectedCell, setSelectedCell ] = useState<Cell | null>(null);
     
     const onClick = (cell: Cell) => {
-        if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
+        if ( selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell) ) {
             selectedCell.moveFigure(cell);
+            swapPlayer();
             setSelectedCell(null);
         } else {
-            setSelectedCell(cell)
+            if ( cell.figure?.color === currentPlayer?.color ) {
+                setSelectedCell(cell)
+            }
         }
     };
     
     // на каждое изменение выбранной ячейки перерисовываем доску
     useEffect(() => {
         highlightCells();
-    }, [selectedCell]);
+    }, [ selectedCell ]);
     
     /**
      * На какие ячейки может перемещаться фигура
@@ -42,21 +48,24 @@ const BoardComponent: React.FC<BoardComponentProps> = ({ board, setBoard }) => {
     };
     
     return (
-        <div className='board'>
-            {
-                board.cells.map((row, idx) =>
-                    <React.Fragment key={ idx }>
-                        { row.map(cell =>
-                            <CellComponent
-                                key={ cell.id }
-                                cell={ cell }
-                                onClick={ onClick }
-                                selected={ selectedCell?.x === cell.x && selectedCell?.y === cell.y }
-                            />
-                        ) }
-                    </React.Fragment>
-                )
-            }
+        <div>
+            <h3>Текущий игрок: {currentPlayer?.color}</h3>
+            <div className='board'>
+                {
+                    board.cells.map((row, idx) =>
+                        <React.Fragment key={ idx }>
+                            { row.map(cell =>
+                                <CellComponent
+                                    key={ cell.id }
+                                    cell={ cell }
+                                    onClick={ onClick }
+                                    selected={ selectedCell?.x === cell.x && selectedCell?.y === cell.y }
+                                />
+                            ) }
+                        </React.Fragment>
+                    )
+                }
+            </div>
         </div>
     );
 };

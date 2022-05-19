@@ -36,15 +36,35 @@ export class Cell {
         }
     }
     
+    /**
+     * Проверка на пустоту
+     */
     isEmpty(): boolean {
         return this.figure === null;
     }
     
+    /**
+     * Проверка на врага
+     * @param target
+     */
+    isEnemy(target: Cell): boolean {
+        if (target.figure) {
+            return this.figure?.cell.color !== target.figure.color;
+        }
+        return false
+    }
+    
+    /**
+     * Движение по вертикали
+     * @param target
+     */
     isEmptyVertical(target: Cell): boolean {
+        // если не вертикаль
         if (this.x !== target.x) {
             return false;
         }
         
+        // минимальное и максимальное значения до целевой ячейки
         const min = Math.min(this.y, target.y);
         const max = Math.max(this.y, target.y);
         
@@ -58,6 +78,10 @@ export class Cell {
         return true;
     }
     
+    /**
+     * Движение по горизонтали
+     * @param target
+     */
     isEmptyHorizontal(target: Cell): boolean {
         if (this.y !== target.y) {
             return false;
@@ -76,6 +100,10 @@ export class Cell {
         return true;
     }
     
+    /**
+     * Движение по диагонали
+     * @param target
+     */
     isEmptyDiagonal(target: Cell): boolean {
         const absX = Math.abs(target.x - this.x);
         const absY = Math.abs(target.y - this.y);
