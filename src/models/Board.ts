@@ -6,10 +6,16 @@ import { Queen } from "./figures/Queen";
 import { Bishop } from "./figures/Bishop";
 import { Knight } from "./figures/Knight";
 import { Rook } from "./figures/Rook";
+import { Figure } from "./figures/Figure";
 
 export class Board {
     cells: Cell[][] = [];
+    lostBlackFigures: Figure[] = [];
+    lostWhiteFigures: Figure[] = [];
     
+    /**
+     * Инициализация доски
+     */
     public initCells() {
         for ( let i = 0; i < 8; i++ ) {
             const row: Cell[] = [];
@@ -52,13 +58,23 @@ export class Board {
     public getCopyBoard(): Board {
         const newBoard = new Board();
         newBoard.cells = this.cells;
+        newBoard.lostWhiteFigures = this.lostWhiteFigures;
+        newBoard.lostBlackFigures = this.lostBlackFigures;
         return newBoard;
     }
     
+    /**
+     * Получение ячейки
+     * @param x - горизонтальная координата
+     * @param y - вертикальная координата
+     */
     public getCell(x: number, y: number) {
         return this.cells[y][x]
     }
     
+    /**
+     * Добавление пешек
+     */
     private addPawns() {
         for ( let i = 0; i < 8; i++ ) {
             new Pawn(Colors.BLACK, this.getCell(i, 1));
@@ -66,16 +82,25 @@ export class Board {
         }
     }
     
+    /**
+     * Добавление королей
+     */
     private addKings() {
         new King(Colors.BLACK, this.getCell(4, 0));
         new King(Colors.WHITE, this.getCell(4, 7));
     }
     
+    /**
+     * Добавление ферзей
+     */
     private addQueens() {
         new Queen(Colors.BLACK, this.getCell(3, 0));
         new Queen(Colors.WHITE, this.getCell(3, 7));
     }
     
+    /**
+     * Добавление коней
+     */
     private addKnights() {
         new Knight(Colors.BLACK, this.getCell(1, 0));
         new Knight(Colors.BLACK, this.getCell(6, 0));
@@ -83,6 +108,9 @@ export class Board {
         new Knight(Colors.WHITE, this.getCell(6, 7));
     }
     
+    /**
+     * Добавление слонов
+     */
     private addBishops() {
         new Bishop(Colors.BLACK, this.getCell(2, 0));
         new Bishop(Colors.BLACK, this.getCell(5, 0));
@@ -90,6 +118,9 @@ export class Board {
         new Bishop(Colors.WHITE, this.getCell(5, 7));
     }
     
+    /**
+     * Добавление ладей
+     */
     private addRooks() {
         new Rook(Colors.BLACK, this.getCell(0, 0));
         new Rook(Colors.BLACK, this.getCell(7, 0));

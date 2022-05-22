@@ -26,9 +26,28 @@ export class Cell {
         this.figure.cell = this;
     }
     
+    /**
+     * Добавление фигуры в массив съеденных
+     * @param figure
+     */
+    addLostFigure(figure: Figure) {
+        figure.color === Colors.BLACK
+            ? this.board.lostBlackFigures.push(figure)
+            : this.board.lostWhiteFigures.push(figure)
+    }
+    
+    /**
+     * Движение фигуры
+     * @param target
+     */
     moveFigure(target: Cell) {
-        if (this.figure?.canMove(target)) {
+        if ( this.figure?.canMove(target) ) {
             this.figure.moveFigure(target);
+            
+            // проверяем, съедаем ли мы какую-либо фигуру
+            if ( target.figure ) {
+                this.addLostFigure(target.figure);
+            }
             
             // перемещаем фигуру на новую клетку
             target.setFigure(this.figure);
@@ -48,7 +67,7 @@ export class Cell {
      * @param target
      */
     isEnemy(target: Cell): boolean {
-        if (target.figure) {
+        if ( target.figure ) {
             return this.figure?.cell.color !== target.figure.color;
         }
         return false
@@ -60,7 +79,7 @@ export class Cell {
      */
     isEmptyVertical(target: Cell): boolean {
         // если не вертикаль
-        if (this.x !== target.x) {
+        if ( this.x !== target.x ) {
             return false;
         }
         
@@ -69,8 +88,8 @@ export class Cell {
         const max = Math.max(this.y, target.y);
         
         // если клетка не пустая, возвращаем ложь
-        for (let y = min + 1; y < max; y++) {
-            if (!this.board.getCell(this.x, y).isEmpty()) {
+        for ( let y = min + 1; y < max; y++ ) {
+            if ( !this.board.getCell(this.x, y).isEmpty() ) {
                 return false;
             }
         }
@@ -83,20 +102,20 @@ export class Cell {
      * @param target
      */
     isEmptyHorizontal(target: Cell): boolean {
-        if (this.y !== target.y) {
+        if ( this.y !== target.y ) {
             return false;
         }
-    
+        
         const min = Math.min(this.x, target.x);
         const max = Math.max(this.x, target.x);
-    
+        
         // если клетка не пустая, возвращаем ложь
-        for (let x = min + 1; x < max; x++) {
-            if (!this.board.getCell(x, this.y).isEmpty()) {
+        for ( let x = min + 1; x < max; x++ ) {
+            if ( !this.board.getCell(x, this.y).isEmpty() ) {
                 return false;
             }
         }
-    
+        
         return true;
     }
     
@@ -108,7 +127,7 @@ export class Cell {
         const absX = Math.abs(target.x - this.x);
         const absY = Math.abs(target.y - this.y);
         // не диагональ
-        if (absX !== absY)
+        if ( absX !== absY )
             return false;
         
         // получаем направление, по которой хочет двигаться фигура
@@ -116,8 +135,8 @@ export class Cell {
         const dx = this.x < target.x ? 1 : -1;
         
         // начинаем цикл с единицы, потому что ячейку мы не проверяем
-        for (let i = 1; i < absY; i++) {
-            if(!this.board.getCell(this.x + dx*i, this.y + dy   * i).isEmpty())
+        for ( let i = 1; i < absY; i++ ) {
+            if ( !this.board.getCell(this.x + dx * i, this.y + dy * i).isEmpty() )
                 return false;
         }
         

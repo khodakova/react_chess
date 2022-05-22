@@ -11,7 +11,12 @@
     align-items: center;
 }
 
+.title {
+    text-align: center;
+}
+
 .board {
+    margin-top: 50px;
     width: calc(64px * 8);
     height: calc(64px * 8);
     display: flex;
@@ -48,4 +53,38 @@
     width: 12px;
     border-radius: 50%;
     background-color: #00c700;
+}
+
+.lost {
+    height: calc(50vh - 60px);
+    padding: 30px;
+    margin-left: 50px;
+    background-color: #bdc5da;
+}
+
+.lost-figure {
+    width: 20px;
+    height: 20px;
+}
+
+.restart-btn {
+    width: 150px;
+    height: 40px;
+    font-size: 18px;
+    color: #3c1c82;
+    background-color: rgba(0, 0, 0, 0);
+    border: solid 1px #3c1c82;
+    cursor: pointer;
+}
+
+.restart-btn:hover {
+    background-color: #fdf1b4;
+}
+
+.timer {
+    margin-right: 50px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
